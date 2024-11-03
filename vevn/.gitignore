@@ -1,0 +1,33 @@
+# created by virtualenv automatically
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+
+# Virtual environment
+venv/
+.venv/
+
+# PyCharm
+.idea/
+*.iml
+
+# Log files
+*.log
+*.tmp
+
+# Databases
+*.sqlite3
+*.db
+*.sqlite
+
+# Test and build caches
+.mypy_cache/
+.pytest_cache/
+.tox/
+.nox/
+build/
+dist/
+docs/_build/
