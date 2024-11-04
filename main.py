@@ -1,6 +1,7 @@
 import pygame
-from pygame import Rect
-from pygame.rect import RectType
+
+# Верный путь к файлам для android
+image_path = '/data/data/com.mario.myapp/files/app'
 
 # Часы фреймов
 clock = pygame.time.Clock()
@@ -9,27 +10,27 @@ clock = pygame.time.Clock()
 pygame.init()
 screen = pygame.display.set_mode((700, 400))
 pygame.display.set_caption("LOTUS PYGAME")
-ikon = pygame. image.load('images/ikon.jpeg')
+ikon = pygame. image.load(image_path + 'images/ikon.jpeg')
 pygame.display.set_icon(ikon)
 
 # Player
 # Конвертация изображений
-bg = pygame.image.load('images/background01.png').convert()
+bg = pygame.image.load(image_path + 'images/background01.png').convert()
 walk_left = [
-    pygame.image.load('images/player_left/Luan01.png').convert_alpha(),
-    pygame.image.load('images/player_left/Luan02.png').convert_alpha(),
-    pygame.image.load('images/player_left/Luan03.png').convert_alpha(),
-    pygame.image.load('images/player_left/Luan04.png').convert_alpha(),
+    pygame.image.load(image_path + 'images/player_left/Luan01.png').convert_alpha(),
+    pygame.image.load(image_path + 'images/player_left/Luan02.png').convert_alpha(),
+    pygame.image.load(image_path + 'images/player_left/Luan03.png').convert_alpha(),
+    pygame.image.load(image_path + 'images/player_left/Luan04.png').convert_alpha(),
 ]
 walk_right = [
-    pygame.image.load('images/player_right/Luan001.png').convert_alpha(),
-    pygame.image.load('images/player_right/Luan002.png').convert_alpha(),
-    pygame.image.load('images/player_right/Luan003.png').convert_alpha(),
-    pygame.image.load('images/player_right/Luan004.png').convert_alpha(),
+    pygame.image.load(image_path + 'images/player_right/Luan001.png').convert_alpha(),
+    pygame.image.load(image_path + 'images/player_right/Luan002.png').convert_alpha(),
+    pygame.image.load(image_path + 'images/player_right/Luan003.png').convert_alpha(),
+    pygame.image.load(image_path + 'images/player_right/Luan004.png').convert_alpha(),
 
 ]
 
-ghost = pygame.image.load('images/ghost.png').convert_alpha()
+ghost = pygame.image.load(image_path + 'images/ghost.png').convert_alpha()
 ghost_list_in_game = []
 
 player_animation_count = 0
@@ -43,7 +44,7 @@ player_y = 229
 is_jump = False
 jump_count = 8
 
-bg_sound = pygame.mixer.Sound('sounds/game_sound.mp3')
+bg_sound = pygame.mixer.Sound(image_path + 'sounds/game_sound.mp3')
 # bg_sound.play()
 
 # Таймер для появления монстра
@@ -51,7 +52,7 @@ ghost_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(ghost_timer, 2500)
 
 # Отображение надписи
-label = pygame.font.Font('font/Monocraft.otf', 45)
+label = pygame.font.Font(image_path + 'font/Monocraft.otf', 45)
 lose_label = label.render("Вы проиграли!", False, (28, 28, 27))
 # Рестарт игры
 restart_label = label.render("Играть заново!", False, (66, 103, 138))
@@ -59,7 +60,7 @@ restart_label_rect = restart_label.get_rect(topleft=(190, 199)) # Для отс�
 
 # Добавление снаряда в игру
 paintballs_left = 5
-paintball = pygame.image.load('images/paintball.png').convert_alpha()
+paintball = pygame.image.load(image_path + 'images/paintball.png').convert_alpha()
 paintballs = []
 
 
@@ -85,10 +86,10 @@ while running:
 
                 #удаление монстра
                 if el.x < -10:
-                    ghost_list_in_game.pop(i) # для удаления монстра через индекс, который будет приписан в 69 строчке кода через новую переменную и через функцию enumerate, чтобы правильно шло печисление(который перебирает список ghost_list_in_game)
+                    ghost_list_in_game.pop(i)
 
                 if player_rect.colliderect(el):
-                    gameplay = False #Как только игрок прикоснеться призрока, то экран поменяет цвет
+                    gameplay = False
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
@@ -130,10 +131,10 @@ while running:
 
 
         # Отображение патронов и их передвижение
-        if paintballs: # Проверяем есть ли этот список. Есть ли в нем какие-то элементы
-            for (i, el) in enumerate(paintballs): # Перебираем все элементы
-                screen.blit(paintball, (el.x, el.y)) # Под каждый элемент рисуем по сути картинку со снарядом. Указываем что снаряды будут находится в тех координатах, которые указывали для предыдущего сноряда из 128 строки
-                el.x += 4 # Сам снаряд будем передвигать по координату "х" к врагам
+        if paintballs:
+            for (i, el) in enumerate(paintballs):
+                screen.blit(paintball, (el.x, el.y))
+                el.x += 4
 
                 # Удаление снаряда
                 if el.x > 720:
@@ -142,10 +143,9 @@ while running:
                 # Уничтожение врагов
                 if ghost_list_in_game:
                     for (index, ghost_el) in enumerate(ghost_list_in_game):
-                        if el.colliderect(ghost_el): # el это по сути снаряд и когда он столкнется с монстром
-                            ghost_list_in_game.pop(index) # То в таком случае мы удаляем монстра из всей игры, из списка
-                            paintballs.pop(i) # И сам по себе снаряд мы также удаляем
-
+                        if el.colliderect(ghost_el):
+                            ghost_list_in_game.pop(index)
+                            paintballs.pop(i)
     else:
         screen.fill((18, 47, 170))
         screen.blit(lose_label, (190, 99))
@@ -153,12 +153,12 @@ while running:
 
         # Обработчик событий, который будет срабатывать при нажатии кнопки
         mous = pygame.mouse.get_pos()
-        if restart_label_rect.collidepoint(mous) and pygame.mouse.get_pressed()[0]: # Проверяет совпадает ли квадрат  restart_label_rect с мышкой и через pygame.mouse.get_pressed() после нажатия кнопки мышью игра заново запускается
+        if restart_label_rect.collidepoint(mous) and pygame.mouse.get_pressed()[0]:
             gameplay = True
             player_x = 150
             ghost_list_in_game.clear()
             paintballs.clear() # Удаление снаряда (связь 1)
-            paintballs_left = 5 # Перезапукается сноряд, когда та заканчивается в условии с 173 по 175 строки
+            paintballs_left = 5
 
 
     pygame.display.update()
@@ -172,6 +172,6 @@ while running:
         # Отслеживание нажатия (исправленная версия)
         if gameplay and event.type == pygame.KEYUP and event.key == pygame.K_a and paintballs_left > 0:
             paintballs.append(paintball.get_rect(topleft=(player_x + 50, player_y + 15)))
-            paintballs_left -= 1 # Весь этот код будет выполняться если paintballs_left больше 0, если 0 снарядом, то часть кода с "ограничение по снарядам" не будет выполняться
+            paintballs_left -= 1
 
     clock.tick(7) #Cкорость шага героя
